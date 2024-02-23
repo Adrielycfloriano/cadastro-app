@@ -1,6 +1,7 @@
 package br.com.toestudando.cadastroapp.service;
 
 import br.com.toestudando.cadastroapp.response.ViaCEPResponse;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 @Service

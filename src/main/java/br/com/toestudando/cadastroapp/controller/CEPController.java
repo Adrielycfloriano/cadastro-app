@@ -2,6 +2,8 @@ package br.com.toestudando.cadastroapp.controller;
 
 import br.com.toestudando.cadastroapp.response.ViaCEPResponse;
 import br.com.toestudando.cadastroapp.service.ViaCEPService;
+
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,7 @@ public class CEPController {
     }
 
     @PostMapping("/consultaCEP")
-    public ViaCEPResponse consultaCEP(@RequestBody ViaCEPResponse request) {
+    public ViaCEPResponse consultaCEP(@RequestBody @Valid ViaCEPResponse request) {
         return viaCEPService.consultarCEP(request.getCep());
     }
 }
