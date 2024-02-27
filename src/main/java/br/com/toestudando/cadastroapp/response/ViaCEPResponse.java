@@ -14,7 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ViaCEPResponse {
 
-    @NotBlank
-    @Pattern(regexp = "\\d{8}")
     private String cep;
 }
