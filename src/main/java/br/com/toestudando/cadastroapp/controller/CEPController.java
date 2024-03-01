@@ -2,10 +2,7 @@ package br.com.toestudando.cadastroapp.controller;
 
 import br.com.toestudando.cadastroapp.response.ViaCEPResponse;
 import br.com.toestudando.cadastroapp.service.ViaCEPService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CEPController {
@@ -16,8 +13,8 @@ public class CEPController {
         this.viaCEPService = viaCEPService;
     }
 
-    @GetMapping("/consultaCEP")
-    public ViaCEPResponse consultaCEP(@RequestBody ViaCEPResponse request) {
-        return viaCEPService.consultarCEP(request.getCep());
+    @GetMapping("/consultaCEP/{cep}")
+    public ViaCEPResponse consultaCEP(@PathVariable String cep) {
+        return viaCEPService.consultarCEP(cep);
     }
 }
