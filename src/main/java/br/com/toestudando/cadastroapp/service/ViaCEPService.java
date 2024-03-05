@@ -3,7 +3,11 @@ package br.com.toestudando.cadastroapp.service;
 import br.com.toestudando.cadastroapp.response.ViaCEPResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ViaCEPService {
@@ -11,17 +15,31 @@ public class ViaCEPService {
     @Autowired
     private HttpServletResponse response;
 
-    public ViaCEPResponse consultarCEP(String cep) {
+    private final RestTemplate restTemplate;
+
+    public ViaCEPService(RestTemplateBuilder restTemplateBuilder) {
+
+        this.restTemplate = restTemplateBuilder.build();
+    }
+
+
+    public ResponseEntity<String> consultarCEP(String cep) {
         try {
             verificaCEP(cep);
-            // Se houver CEP, continua com a consulta
-            ViaCEPResponse viaCEPResponse = new ViaCEPResponse();
-            viaCEPResponse.setCep(cep);
-            return viaCEPResponse;
+            String url = "https://viacep.com.br/ws/" + cep + "/json";
+            ViaCEPResponse viaCEPResponse = restTemplate.getForObject(url, ViaCEPResponse.class);
+
+            String responseString = "CEP: " + viaCEPResponse.getCep() +
+                    "\nLogradouro: " + viaCEPResponse.getLogradouro() +
+                    "\nBairro: " + viaCEPResponse.getBairro() +
+                    "\nLocalidade: " + viaCEPResponse.getLocalidade() +
+                    "\nUF: " + viaCEPResponse.getUf();
+
+            return ResponseEntity.ok(responseString);
         } catch (IllegalArgumentException e) {
-            // Captura a exceção de CEP inválido e retorna uma resposta adequada
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return new ViaCEPResponse(e.getMessage());
+            // Captura a exceção do CEP
+            String errorMessage = e.getMessage();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
         }
     }
 
