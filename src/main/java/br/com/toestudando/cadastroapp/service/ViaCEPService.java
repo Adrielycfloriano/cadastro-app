@@ -1,8 +1,6 @@
 package br.com.toestudando.cadastroapp.service;
 
 import br.com.toestudando.cadastroapp.response.ViaCEPResponse;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ViaCEPService {
 
-    @Autowired
-    private HttpServletResponse response;
-
     private final RestTemplate restTemplate;
 
     public ViaCEPService(RestTemplateBuilder restTemplateBuilder) {
@@ -22,10 +17,10 @@ public class ViaCEPService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-
     public ResponseEntity<String> consultarCEP(String cep) {
+        verificaCEP(cep);
+
         try {
-            verificaCEP(cep);
             String url = "https://viacep.com.br/ws/" + cep + "/json";
             ViaCEPResponse viaCEPResponse = restTemplate.getForObject(url, ViaCEPResponse.class);
 
